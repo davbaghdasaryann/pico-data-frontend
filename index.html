@@ -437,7 +437,7 @@
     </div>
 
     <script>
-        const API_BASE_URL = 'https://144.91.87.61:3001/api';
+        const API_BASE_URL = 'http://144.91.87.61:3001/api';
 
         let charts = {};
         let refreshInterval;
@@ -487,6 +487,48 @@
                 refreshInterval = setInterval(refreshData, 30000);
                 btn.textContent = 'Auto Refresh On';
                 btn.classList.add('active');
+            }
+        }
+
+        function createOrUpdateChart(chartId, type, data, options) {
+            const ctx = document.getElementById(chartId);
+            if (!ctx) return;
+
+            if (charts[chartId]) {
+                charts[chartId].data = data;
+                charts[chartId].options.plugins.title.text = options.title;
+                charts[chartId].update();
+            } else {
+                charts[chartId] = new Chart(ctx, {
+                    type: type,
+                    data: data,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: options.title,
+                                color: '#ccc',
+                                font: { size: 16 }
+                            },
+                            legend: {
+                                display: true,
+                                labels: { color: '#ccc' }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: { color: '#888' },
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                            },
+                            y: {
+                                ticks: { color: '#888' },
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                            }
+                        }
+                    }
+                });
             }
         }
 
@@ -640,48 +682,6 @@
                         title: `Soil Moisture - Sensor ${i}`
                     });
                 }
-            }
-        }
-
-        function createOrUpdateChart(chartId, type, data, options) {
-            const ctx = document.getElementById(chartId);
-            if (!ctx) return;
-
-            if (charts[chartId]) {
-                charts[chartId].data = data;
-                charts[chartId].options.plugins.title.text = options.title;
-                charts[chartId].update();
-            } else {
-                charts[chartId] = new Chart(ctx, {
-                    type: type,
-                    data: data,
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: options.title,
-                                color: '#ccc',
-                                font: { size: 16 }
-                            },
-                            legend: {
-                                display: true,
-                                labels: { color: '#ccc' }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                ticks: { color: '#888' },
-                                grid: { color: 'rgba(255, 255, 255, 0.1)' }
-                            },
-                            y: {
-                                ticks: { color: '#888' },
-                                grid: { color: 'rgba(255, 255, 255, 0.1)' }
-                            }
-                        }
-                    }
-                });
             }
         }
 
