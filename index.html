@@ -4,10 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IoT Sensor Dashboard</title>
+    <title>Botanical Sensor Dashboard</title>
+    <!-- Use a more organic-looking font for the botanical theme -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Define a new, lighter color palette and organic font for the botanical theme */
+        :root {
+            --color-bg-light: #f5f5f5;
+            --color-text-dark: #333;
+            --color-card-bg: #fff;
+            --color-green-primary: #6c9a75;
+            --color-green-light: #a3c4a9;
+            --color-orange: #d1a166;
+            --color-brown: #a0816b;
+            --color-red: #d9534f;
+        }
+
         /* General body and container styling */
         * {
             margin: 0;
@@ -16,9 +36,10 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
-            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--color-bg-light);
+            background: linear-gradient(135deg, #f0f4f0 0%, #e0e8e0 50%, #d8e0d8 100%);
+            color: var(--color-text-dark);
             min-height: 100vh;
             overflow-x: hidden;
         }
@@ -29,7 +50,7 @@
             padding: 20px;
         }
 
-        /* Header styling */
+        /* Header styling with new font */
         .header {
             text-align: center;
             margin-bottom: 40px;
@@ -37,19 +58,26 @@
         }
 
         .header-title {
-            font-size: 2.5rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
-            text-shadow: 0 0 10px rgba(76, 217, 100, 0.5);
+            color: var(--color-green-primary);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
             animation: fadeIn 1.2s forwards;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
         }
 
         .header-subtitle {
-            font-size: 1rem;
-            color: #ccc;
+            font-size: 1.1rem;
+            color: #555;
             animation: fadeIn 1.5s forwards;
         }
 
+        /* Live indicator with a softer botanical feel */
         .live-indicator {
             position: absolute;
             top: 0;
@@ -58,26 +86,45 @@
             align-items: center;
             gap: 8px;
             padding: 8px 16px;
-            background-color: rgba(76, 217, 100, 0.2);
-            border: 1px solid rgba(76, 217, 100, 0.5);
+            background-color: rgba(108, 154, 117, 0.2);
+            border: 1px solid rgba(108, 154, 117, 0.5);
             border-radius: 999px;
             font-size: 0.8rem;
             font-weight: 600;
-            color: #4cd964;
+            color: var(--color-green-primary);
             animation: pulse 1.5s infinite;
         }
 
         @keyframes pulse {
             0% {
-                box-shadow: 0 0 0 0 rgba(76, 217, 100, 0.4);
+                box-shadow: 0 0 0 0 rgba(108, 154, 117, 0.4);
             }
 
             70% {
-                box-shadow: 0 0 0 10px rgba(76, 217, 100, 0);
+                box-shadow: 0 0 0 10px rgba(108, 154, 117, 0);
             }
 
             100% {
-                box-shadow: 0 0 0 0 rgba(76, 217, 100, 0);
+                box-shadow: 0 0 0 0 rgba(108, 154, 117, 0);
+            }
+        }
+
+        /* Plant icon animation */
+        .plant-icon {
+            font-size: 2.5rem;
+            color: var(--color-green-primary);
+            animation: plantGrow 2s ease-out forwards;
+        }
+
+        @keyframes plantGrow {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
             }
         }
 
@@ -92,44 +139,46 @@
 
         .btn {
             padding: 10px 20px;
-            border-radius: 8px;
+            border-radius: 20px;
+            /* More rounded for a softer look */
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .btn-primary {
-            background: linear-gradient(145deg, #4cd964, #36a44a);
+            background: linear-gradient(145deg, var(--color-green-primary), #5a8260);
             color: #fff;
             border: none;
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
         }
 
         .btn-secondary {
-            background-color: #333;
-            color: #fff;
-            border: 1px solid #555;
+            background-color: var(--color-card-bg);
+            color: var(--color-text-dark);
+            border: 1px solid #ccc;
         }
 
         .btn-secondary:hover {
-            background-color: #444;
+            background-color: #f0f0f0;
             transform: translateY(-2px);
         }
 
         .toggle-btn {
-            background-color: #555;
-            color: #fff;
+            background-color: #ccc;
+            color: var(--color-text-dark);
             border: none;
         }
 
         .toggle-btn.active {
-            background-color: #4cd964;
-            box-shadow: 0 0 10px #4cd964;
+            background-color: var(--color-green-primary);
+            color: #fff;
+            box-shadow: 0 0 10px rgba(108, 154, 117, 0.5);
         }
 
         /* Status cards styling */
@@ -141,12 +190,18 @@
         }
 
         .status-card {
-            background-color: #1c2b4d;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            background-color: var(--color-card-bg);
+            border-radius: 30px;
+            /* More rounded */
+            padding: 25px;
+            /* Increased padding */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .status-card:hover {
@@ -154,14 +209,18 @@
         }
 
         .card-title {
-            font-size: 1rem;
-            color: #ccc;
+            font-size: 1.1rem;
+            color: #777;
             margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .card-value {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 700;
+            color: var(--color-text-dark);
         }
 
         /* Dashboard grid and charts styling */
@@ -173,17 +232,19 @@
         }
 
         .chart-container {
-            background-color: #1c2b4d;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            background-color: var(--color-card-bg);
+            border-radius: 30px;
+            /* More rounded */
+            padding: 25px;
+            /* Increased padding */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
             opacity: 0;
             /* Initially hidden for animation */
             animation: fadeInUp 0.6s ease forwards;
         }
 
         .chart-title {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 600;
             margin-bottom: 15px;
             text-align: center;
@@ -197,15 +258,16 @@
 
         /* Table styling */
         .table-container {
-            background-color: #1c2b4d;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            background-color: var(--color-card-bg);
+            border-radius: 30px;
+            padding: 25px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
         }
 
         .data-table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0 10px;
             font-size: 0.9rem;
         }
 
@@ -213,41 +275,49 @@
         .data-table td {
             padding: 12px;
             text-align: left;
-            border-bottom: 1px solid #333;
         }
 
+        /* Apply a softer, more rounded style to table headers */
         .data-table th {
-            color: #4cd964;
+            color: var(--color-green-primary);
             font-weight: 600;
-            background-color: #2a3a5b;
             text-transform: uppercase;
+            background-color: #f0f0f0;
+            border-radius: 15px;
+        }
+
+        /* Style table rows with a subtle hover effect */
+        .data-table tr {
+            background-color: var(--color-card-bg);
+            border-radius: 15px;
+            transition: all 0.3s ease;
         }
 
         .data-table tr:hover {
-            background-color: #2a3a5b;
+            background-color: #f8f8f8;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
         }
 
         .status-badge {
             display: inline-block;
-            padding: 4px 10px;
-            border-radius: 10px;
+            padding: 6px 12px;
+            border-radius: 15px;
             font-size: 0.8rem;
             font-weight: 600;
+            color: #fff;
         }
 
+        /* Updated color palette for status badges */
         .status-badge-ok {
-            background-color: #4cd964;
-            color: #1c2b4d;
+            background-color: var(--color-green-primary);
         }
 
         .status-badge-warning {
-            background-color: #ffcc00;
-            color: #1c2b4d;
+            background-color: var(--color-orange);
         }
 
         .status-badge-critical {
-            background-color: #ff3b30;
-            color: #fff;
+            background-color: var(--color-red);
         }
 
         /* Fallback and loading states */
@@ -255,7 +325,7 @@
             text-align: center;
             margin-top: 50px;
             font-size: 1.2rem;
-            color: #ff3b30;
+            color: var(--color-red);
         }
 
         /* Keyframe animations */
@@ -287,7 +357,10 @@
     <div class="container">
         <!-- Header -->
         <header class="header">
-            <h1 class="header-title">IoT Sensor Dashboard</h1>
+            <h1 class="header-title">
+                <i class="fa-solid fa-seedling plant-icon"></i>
+                The Digital Garden
+            </h1>
             <p class="header-subtitle">Real-time Environmental Data</p>
             <div class="live-indicator">
                 <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
@@ -299,12 +372,12 @@
         <section class="controls">
             <button id="refreshBtn" class="btn btn-primary">Refresh Data</button>
             <button id="autoRefreshBtn" class="btn toggle-btn">Auto Refresh</button>
-            <select id="dataPointsSelect" class="bg-gray-800 text-white rounded-md p-2 border border-gray-600">
+            <select id="dataPointsSelect" class="bg-gray-200 text-gray-800 rounded-full p-2 border border-gray-300">
                 <option value="50">50 Points</option>
                 <option value="100" selected>100 Points</option>
                 <option value="200">200 Points</option>
             </select>
-            <select id="timeRangeSelect" class="bg-gray-800 text-white rounded-md p-2 border border-gray-600">
+            <select id="timeRangeSelect" class="bg-gray-200 text-gray-800 rounded-full p-2 border border-gray-300">
                 <option value="1h">Last Hour</option>
                 <option value="24h">Last 24 Hours</option>
                 <option value="all">All Data</option>
@@ -315,43 +388,63 @@
         <!-- Status Cards -->
         <section class="status-cards" id="statusCards">
             <div class="status-card">
-                <h3 class="card-title">Total Records</h3>
+                <h3 class="card-title">
+                    <i class="fa-solid fa-database"></i> Total Records
+                </h3>
                 <p id="totalRecords" class="card-value">...</p>
             </div>
             <div class="status-card">
-                <h3 class="card-title">Latest Temp (°C)</h3>
+                <h3 class="card-title">
+                    <i class="fa-solid fa-thermometer-half"></i> Latest Temp (°C)
+                </h3>
                 <p id="currentTemp" class="card-value">...</p>
             </div>
             <div class="status-card">
-                <h3 class="card-title">Latest Humidity (%)</h3>
+                <h3 class="card-title">
+                    <i class="fa-solid fa-droplet"></i> Latest Humidity (%)
+                </h3>
                 <p id="currentHumidity" class="card-value">...</p>
             </div>
             <div class="status-card">
-                <h3 class="card-title">Latest Air Quality</h3>
+                <h3 class="card-title">
+                    <i class="fa-solid fa-seedling"></i> Latest Air Quality
+                </h3>
                 <p id="currentAirQuality" class="card-value">...</p>
             </div>
             <div class="status-card">
-                <h3 class="card-title">Latest Soil Moisture 1 (%)</h3>
+                <h3 class="card-title">
+                    <i class="fa-solid fa-water"></i> Latest Soil Moisture 1 (%)
+                </h3>
                 <p id="currentSoilMoisture1" class="card-value">...</p>
             </div>
             <div class="status-card">
-                <h3 class="card-title">Latest Soil Moisture 2 (%)</h3>
+                <h3 class="card-title">
+                    <i class="fa-solid fa-water"></i> Latest Soil Moisture 2 (%)
+                </h3>
                 <p id="currentSoilMoisture2" class="card-value">...</p>
             </div>
             <div class="status-card">
-                <h3 class="card-title">Latest Soil Moisture 3 (%)</h3>
+                <h3 class="card-title">
+                    <i class="fa-solid fa-water"></i> Latest Soil Moisture 3 (%)
+                </h3>
                 <p id="currentSoilMoisture3" class="card-value">...</p>
             </div>
             <div class="status-card">
-                <h3 class="card-title">Latest Soil Moisture 4 (%)</h3>
+                <h3 class="card-title">
+                    <i class="fa-solid fa-water"></i> Latest Soil Moisture 4 (%)
+                </h3>
                 <p id="currentSoilMoisture4" class="card-value">...</p>
             </div>
             <div class="status-card">
-                <h3 class="card-title">Latest Soil Moisture 5 (%)</h3>
+                <h3 class="card-title">
+                    <i class="fa-solid fa-water"></i> Latest Soil Moisture 5 (%)
+                </h3>
                 <p id="currentSoilMoisture5" class="card-value">...</p>
             </div>
             <div class="status-card">
-                <h3 class="card-title">Latest Soil Moisture 6 (%)</h3>
+                <h3 class="card-title">
+                    <i class="fa-solid fa-water"></i> Latest Soil Moisture 6 (%)
+                </h3>
                 <p id="currentSoilMoisture6" class="card-value">...</p>
             </div>
         </section>
@@ -437,6 +530,8 @@
     </div>
 
     <script>
+        // The API base URL is hardcoded as HTTP since the endpoint doesn't support HTTPS.
+        // In a real-world scenario, you would need a server-side proxy to avoid mixed content errors.
         const API_BASE_URL = 'http://144.91.87.61:3001/api';
 
         let charts = {};
@@ -494,40 +589,54 @@
             const ctx = document.getElementById(chartId);
             if (!ctx) return;
 
+            // Updated chart styling to match the botanical theme
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: options.title,
+                        color: 'var(--color-text-dark)',
+                        font: { size: 16 }
+                    },
+                    legend: {
+                        display: true,
+                        labels: { color: 'var(--color-text-dark)' }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: '#888' },
+                        grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                    },
+                    y: {
+                        ticks: { color: '#888' },
+                        grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                    }
+                }
+            };
+
+            // Define a botanical color palette for charts
+            const botanicalColors = ['#6c9a75', '#d1a166', '#a0816b', '#a3c4a9', '#4b6e5b', '#b38a7c', '#98c19a'];
+
             if (charts[chartId]) {
                 charts[chartId].data = data;
                 charts[chartId].options.plugins.title.text = options.title;
                 charts[chartId].update();
             } else {
+                // Ensure the chart's data colors are updated
+                if (data.datasets && data.datasets.length > 0) {
+                    data.datasets.forEach((dataset, index) => {
+                        dataset.borderColor = dataset.borderColor || botanicalColors[index % botanicalColors.length];
+                        dataset.backgroundColor = dataset.backgroundColor || botanicalColors[index % botanicalColors.length] + '40'; // 40 is for transparency
+                    });
+                }
+
                 charts[chartId] = new Chart(ctx, {
                     type: type,
                     data: data,
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: options.title,
-                                color: '#ccc',
-                                font: { size: 16 }
-                            },
-                            legend: {
-                                display: true,
-                                labels: { color: '#ccc' }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                ticks: { color: '#888' },
-                                grid: { color: 'rgba(255, 255, 255, 0.1)' }
-                            },
-                            y: {
-                                ticks: { color: '#888' },
-                                grid: { color: 'rgba(255, 255, 255, 0.1)' }
-                            }
-                        }
-                    }
+                    options: chartOptions
                 });
             }
         }
@@ -576,8 +685,8 @@
             if (airData && airData.data && airData.data.length > 0) {
                 const latestAir = airData.data[0];
                 document.getElementById('totalRecords').textContent = airData.data.length + soilData.data.length;
-                document.getElementById('currentTemp').textContent = latestAir.temperature ? latestAir.temperature.toFixed(1) : 'N/A';
-                document.getElementById('currentHumidity').textContent = latestAir.humidity ? latestAir.humidity.toFixed(1) : 'N/A';
+                document.getElementById('currentTemp').textContent = latestAir.temperature ? latestAir.temperature.toFixed(1) + '°C' : 'N/A';
+                document.getElementById('currentHumidity').textContent = latestAir.humidity ? latestAir.humidity.toFixed(1) + '%' : 'N/A';
                 document.getElementById('currentAirQuality').textContent = latestAir.air_quality ? latestAir.air_quality.status : 'N/A';
             }
 
@@ -601,8 +710,8 @@
                     datasets: [{
                         label: 'Air Quality Index',
                         data: airQualityData,
-                        borderColor: '#007bff',
-                        backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                        borderColor: '#6c9a75',
+                        backgroundColor: 'rgba(108, 154, 117, 0.4)',
                         tension: 0.4,
                         fill: true
                     }]
@@ -618,15 +727,15 @@
                     datasets: [{
                         label: 'Temperature (°C)',
                         data: tempData,
-                        borderColor: '#ffcc00',
-                        backgroundColor: 'rgba(255, 204, 0, 0.1)',
+                        borderColor: '#d1a166',
+                        backgroundColor: 'rgba(209, 161, 102, 0.4)',
                         tension: 0.4,
                         fill: false
                     }, {
                         label: 'Humidity (%)',
                         data: humidityData,
-                        borderColor: '#5ac8fa',
-                        backgroundColor: 'rgba(90, 200, 250, 0.1)',
+                        borderColor: '#a0816b',
+                        backgroundColor: 'rgba(160, 129, 107, 0.4)',
                         tension: 0.4,
                         fill: false
                     }]
@@ -642,15 +751,15 @@
                     datasets: [{
                         label: 'PM2.5',
                         data: pm25Data,
-                        borderColor: '#a341b4',
-                        backgroundColor: 'rgba(163, 65, 180, 0.1)',
+                        borderColor: '#a3c4a9',
+                        backgroundColor: 'rgba(163, 196, 169, 0.4)',
                         tension: 0.4,
                         fill: false
                     }, {
                         label: 'PM10',
                         data: pm10Data,
-                        borderColor: '#ff6600',
-                        backgroundColor: 'rgba(255, 102, 0, 0.1)',
+                        borderColor: '#4b6e5b',
+                        backgroundColor: 'rgba(75, 110, 91, 0.4)',
                         tension: 0.4,
                         fill: false
                     }]
@@ -673,8 +782,8 @@
                         datasets: [{
                             label: `Sensor ${i} Moisture (%)`,
                             data: moistureData,
-                            borderColor: '#4cd964',
-                            backgroundColor: 'rgba(76, 217, 100, 0.1)',
+                            borderColor: '#a38a7c',
+                            backgroundColor: 'rgba(179, 138, 124, 0.4)',
                             tension: 0.4,
                             fill: true
                         }]
