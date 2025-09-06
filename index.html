@@ -717,9 +717,12 @@
                 const latestAir = airData[0];
                 document.getElementById('currentTemp').textContent = latestAir.temperature ? latestAir.temperature.toFixed(1) + '°C' : 'N/A';
                 document.getElementById('currentHumidity').textContent = latestAir.humidity ? latestAir.humidity.toFixed(1) + '%' : 'N/A';
-                document.getElementById('currentAirQuality').textContent = latestAir.air_quality ? latestAir.air_quality.status : 'N/A';
-                document.getElementById('currentPM25').textContent = latestAir.air_quality?.pm2_5 ? latestAir.air_quality.pm2_5.toFixed(1) + 'µg/m³' : 'N/A';
-                document.getElementById('currentPM10').textContent = latestAir.air_quality?.pm10 ? latestAir.air_quality.pm10.toFixed(1) + 'µg/m³' : 'N/A';
+                document.getElementById('currentAirQuality').textContent = latestAir.air_quality?.status || 'N/A';
+
+                // Correctly access PM2.5 and PM10 directly from the latestAir object
+                document.getElementById('currentPM25').textContent = latestAir.pm25 ? latestAir.pm25.toFixed(1) + 'µg/m³' : 'N/A';
+                document.getElementById('currentPM10').textContent = latestAir.pm10 ? latestAir.pm10.toFixed(1) + 'µg/m³' : 'N/A';
+
                 totalRecords += airData.length;
             } else {
                 // Set to N/A if no data
@@ -811,7 +814,8 @@
                 modalTitle = 'PM2.5 History';
                 tableData = airData.map(item => ({
                     timestamp: new Date(item.created_at).toLocaleString(),
-                    value: item.air_quality?.pm2_5 ? item.air_quality.pm2_5.toFixed(1) + 'µg/m³' : 'N/A',
+                    // Correctly access PM2.5 directly from the item object
+                    value: item.pm25 ? item.pm25.toFixed(1) + 'µg/m³' : 'N/A',
                     status: item.air_quality?.status || 'N/A',
                     signal: item.signal_strength || 'N/A'
                 }));
@@ -819,28 +823,10 @@
                     labels: airData.map(item => new Date(item.created_at).toLocaleTimeString()),
                     datasets: [{
                         label: 'PM2.5 (µg/m³)',
-                        data: airData.map(item => item.air_quality?.pm2_5),
+                        // Correctly access PM2.5 directly from the item object
+                        data: airData.map(item => item.pm25),
                         borderColor: '#5a8260',
                         backgroundColor: 'rgba(90, 130, 96, 0.4)',
-                        tension: 0.4,
-                        fill: false
-                    }]
-                };
-            } else if (cardId === 'pm10-card') {
-                modalTitle = 'PM10 History';
-                tableData = airData.map(item => ({
-                    timestamp: new Date(item.created_at).toLocaleString(),
-                    value: item.air_quality?.pm10 ? item.air_quality.pm10.toFixed(1) + 'µg/m³' : 'N/A',
-                    status: item.air_quality?.status || 'N/A',
-                    signal: item.signal_strength || 'N/A'
-                }));
-                chartData = {
-                    labels: airData.map(item => new Date(item.created_at).toLocaleTimeString()),
-                    datasets: [{
-                        label: 'PM10 (µg/m³)',
-                        data: airData.map(item => item.air_quality?.pm10),
-                        borderColor: '#98c19a',
-                        backgroundColor: 'rgba(152, 193, 154, 0.4)',
                         tension: 0.4,
                         fill: false
                     }]
